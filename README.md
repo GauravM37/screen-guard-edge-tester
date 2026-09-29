@@ -4,8 +4,6 @@ A lightweight, offline-friendly browser tool for estimating how many display pix
 
 ## Live Demo
 
-After enabling GitHub Pages, the site will be available at:
-
 `https://gauravm37.github.io/screen-guard-edge-tester/
 `
 
