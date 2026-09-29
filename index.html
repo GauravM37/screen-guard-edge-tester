@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Screen Guard Edge Tester v7</title>
+<style>
+html,body{margin:0;width:100%;height:100%;overflow:hidden;background:#000;color:#fff;font-family:Arial}
+.edge{position:fixed;background:#00ff00;pointer-events:none}
+#top{top:0;left:0;width:100%;height:0}
+#bottom{bottom:0;left:0;width:100%;height:0}
+#left{top:0;left:0;width:0;height:100%}
+#right{top:0;right:0;width:0;height:100%}
+#panel{position:fixed;left:50%;top:50%;transform:translate(-50%,-50%);
+background:rgba(20,20,20,.85);padding:14px;border-radius:12px;text-align:center;min-width:300px}
+button,input{margin:3px;padding:8px 10px}
+.active{background:#228b22;color:#fff}
+.small{font-size:12px;opacity:.9}
+.warn{color:#ffd966}
+</style>
+</head>
+<body>
+<div id="top" class="edge"></div><div id="bottom" class="edge"></div>
+<div id="left" class="edge"></div><div id="right" class="edge"></div>
+
+<div id="panel">
+<div>
+<button class="sel" data-edge="top">Top</button>
+<button class="sel" data-edge="bottom">Bottom</button><br>
+<button class="sel" data-edge="left">Left</button>
+<button class="sel" data-edge="right">Right</button>
+</div>
+<div id="count" style="font-size:22px;margin:8px"></div>
+<input id="pix" type="number" min="0" value="0" style="width:90px">
+<button id="setBtn">Set</button><br>
+<button id="minus">-1</button><button id="plus">+1</button>
+<button id="reset">Reset</button><button id="fs">Fullscreen</button>
+<div id="warn" class="small warn"></div>
+<div id="info" class="small"></div>
+<div id="cal" class="small"></div>
+</div>
+
+<script>
+const dpr=window.devicePixelRatio||1;
+const vals={top:0,bottom:0,left:0,right:0};
+let current="top";
+const edges={top:document.getElementById("top"),bottom:document.getElementById("bottom"),
+left:document.getElementById("left"),right:document.getElementById("right")};
+
+function viewport(){
+ const vv=window.visualViewport;
+ return {w:(vv?vv.width:window.innerWidth),h:(vv?vv.height:window.innerHeight)};
+}
+function update(){
+ const vp=viewport();
+ edges.top.style.height=(vals.top/dpr)+"px";
+ edges.bottom.style.height=(vals.bottom/dpr)+"px";
+ edges.left.style.width=(vals.left/dpr)+"px";
+ edges.right.style.width=(vals.right/dpr)+"px";
+ document.querySelectorAll(".sel").forEach(b=>b.classList.toggle("active",b.dataset.edge===current));
+ document.getElementById("pix").value=vals[current];
+ const physW=Math.round(vp.w*dpr), physH=Math.round(vp.h*dpr);
+ const scrW=Math.round(screen.width*dpr), scrH=Math.round(screen.height*dpr);
+ const total=(current==="left"||current==="right")?physW:physH;
+ document.getElementById("count").textContent=current.toUpperCase()+": "+vals[current]+" px ("+(vals[current]/Math.max(total,1)*100).toFixed(2)+"%)";
+ document.getElementById("info").textContent=`Viewport: ${physW}×${physH} | Screen API: ${scrW}×${scrH} | DPR ${dpr.toFixed(2)}`;
+ document.getElementById("cal").textContent=`Difference: ${Math.max(0,scrW-physW)} px width, ${Math.max(0,scrH-physH)} px height`;
+ document.getElementById("warn").textContent=document.fullscreenElement?"":"⚠ Not in fullscreen. Measurements may be affected.";
+}
+document.querySelectorAll(".sel").forEach(b=>b.onclick=()=>{current=b.dataset.edge;update();});
+plus.onclick=()=>{vals[current]++;update();};
+minus.onclick=()=>{if(vals[current]>0)vals[current]--;update();};
+reset.onclick=()=>{for(let k in vals)vals[k]=0;update();};
+setBtn.onclick=()=>{vals[current]=Math.max(0,parseInt(pix.value)||0);update();};
+pix.onkeydown=e=>{if(e.key==="Enter")setBtn.click();};
+fs.onclick=()=>document.documentElement.requestFullscreen?.();
+
+function delayed(){setTimeout(update,100);setTimeout(update,350);setTimeout(update,700);}
+window.addEventListener("resize",delayed);
+window.addEventListener("orientationchange",delayed);
+document.addEventListener("fullscreenchange",delayed);
+if(window.visualViewport){
+ visualViewport.addEventListener("resize",delayed);
+ visualViewport.addEventListener("scroll",delayed);
+}
+update();
+</script>
+
+<style>
+#welcomeOverlay{position:fixed;inset:0;z-index:9999;background:#111;display:flex;align-items:center;justify-content:center;color:#fff;font-family:Arial,sans-serif;padding:24px;box-sizing:border-box}
+#welcomeCard{max-width:640px;background:#1f1f1f;border-radius:18px;padding:28px;text-align:center;box-shadow:0 8px 30px rgba(0,0,0,.5)}
+#welcomeCard h1{margin:0 0 8px;font-size:32px}
+#welcomeCard .ver{opacity:.8;margin-bottom:20px}
+#welcomeCard p{line-height:1.6}
+#welcomeCard ul{display:inline-block;text-align:left;line-height:1.8;margin:12px auto}
+#gh{margin-top:22px;color:#aaa;font-size:14px}
+#startTesting{margin-top:24px;padding:14px 28px;border:none;border-radius:10px;background:#228b22;color:#fff;font-size:18px;font-weight:bold;cursor:pointer}
+</style>
+<div id="welcomeOverlay">
+<div id="welcomeCard">
+<h1>Screen Guard Edge Tester</h1>
+<div class="ver">Version 7.0</div>
+<p><b>Measure how many display pixels are hidden by your screen protector.</b></p>
+<p>This tool draws a thin green line from the edge of your display, allowing you to accurately determine how much of the active screen is covered.</p>
+<p><b>For Best Accuracy</b></p>
+<ul>
+<li>Use your browser at <b>100% zoom</b>.</li>
+<li>Use <b>Fullscreen</b> mode before measuring.</li>
+</ul>
+<p><b>Recommended Browser</b><br>Google Chrome</p>
+<div id="gh">GitHub: <b>GauravM37</b></div>
+<button id="startTesting">Start Testing</button>
+</div>
+</div>
+<script>
+document.addEventListener("DOMContentLoaded",()=>{
+ const o=document.getElementById("welcomeOverlay");
+ document.getElementById("startTesting").addEventListener("click",()=>{
+   o.style.transition="opacity .35s ease";
+   o.style.opacity="0";
+   setTimeout(()=>o.remove(),350);
+ });
+});
+</script>
+
+</body>
+</html>
