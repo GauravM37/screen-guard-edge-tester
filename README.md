@@ -6,7 +6,7 @@ A lightweight, offline-friendly browser tool for estimating how many display pix
 
 After enabling GitHub Pages, the site will be available at:
 
-`https://<your-github-username>.github.io/<repository-name>/`
+`https://gauravm37.github.io/screen-guard-edge-tester/`
 
 ## Features
 
@@ -48,75 +48,3 @@ For the most accurate results:
 The tool uses browser-provided viewport and display information. Browser behavior can vary across Android devices, especially around fullscreen, display scaling, rounded corners, punch-hole cameras, notches, and system UI.
 
 The displayed pixel count is intended as a practical screen-protector alignment/coverage measurement, not a hardware-level display diagnostic.
-
-## Project Structure
-
-```text
-screen-guard-edge-tester/
-├── index.html
-├── README.md
-├── LICENSE
-└── .nojekyll
-```
-
-## Deploy to GitHub Pages
-
-### 1. Create the repository
-
-On GitHub, create a new repository, for example:
-
-`screen-guard-edge-tester`
-
-For a GitHub Free account, use a **public repository** for GitHub Pages. citeturn154224search5
-
-### 2. Copy the files
-
-Put these files in the repository root:
-
-- `index.html`
-- `README.md`
-- `LICENSE`
-- `.nojekyll`
-
-GitHub Pages looks for `index.html` at the top level of the selected publishing source. citeturn154224search7
-
-### 3. Push with Git
-
-```bash
-git init
-git add .
-git commit -m "Initial release v7.0"
-git branch -M main
-git remote add origin https://github.com/<your-github-username>/screen-guard-edge-tester.git
-git push -u origin main
-```
-
-### 4. Enable GitHub Pages
-
-In the repository:
-
-`Settings` → `Pages`
-
-Under **Build and deployment**:
-
-- **Source:** `Deploy from a branch`
-- **Branch:** `main`
-- **Folder:** `/ (root)`
-
-Then click **Save**. This is the standard branch-based GitHub Pages setup documented by GitHub. citeturn154224search8
-
-### 5. Open the site
-
-For a repository named `screen-guard-edge-tester`, the project-site URL will normally be:
-
-`https://<your-github-username>.github.io/screen-guard-edge-tester/`
-
-GitHub Pages turns a repository into a live website without separate hosting. citeturn154224search4
-
-## HTTPS
-
-GitHub Pages sites on `github.io` are served over HTTPS automatically, and GitHub provides an option to enforce HTTPS from the Pages settings. citeturn154224search0
-
-## License
-
-This project is provided under the MIT License. See `LICENSE`.
